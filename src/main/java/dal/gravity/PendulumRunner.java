@@ -1,23 +1,29 @@
 package dal.gravity;
 
 import java.text.NumberFormat;
+import java.util.Random;
 
 /** 
  * compares the values of a simple pendulum using the harmonic motion equation
  * versus the Euler algorithm approximation
  */
 public class PendulumRunner {
-
+	
     public static void main (String [] args) {
+    Random randInt = new Random();
+    	
 	NumberFormat nf = NumberFormat.getInstance ();
 	nf.setMaximumFractionDigits (3);
 
 	double delta = (args.length == 0) ? .1 : Double.parseDouble (args[0]);
 	double sLen = 10, pMass = 10, theta0 = Math.PI/30;
-	RegularPendulum rp = new RegularPendulum (sLen, pMass, theta0, delta);
-	SimplePendulum sp = new SimplePendulum (sLen, pMass, theta0);
+	
+	GravityConstant gravityConstant = new GravityConstant(9.81);
+	
+	RegularPendulum rp = new RegularPendulum (sLen, pMass, theta0, delta, gravityConstant.getGravitationalField());
+	SimplePendulum sp = new SimplePendulum (sLen, pMass, theta0, gravityConstant.getGravitationalField());
 	RegularPendulum rpCoarse = 
-	    new RegularPendulum (sLen, pMass, theta0, .1);
+	    new RegularPendulum (sLen, pMass, theta0, .1, gravityConstant.getGravitationalField());
 
 	// print out difference in displacement in 1 second intervals
 	// for 20 seconds
@@ -32,6 +38,15 @@ public class PendulumRunner {
 				nf.format (Math.toDegrees (rp.getLastTheta ()))
 				+ "\t" + 
 				nf.format (Math.toDegrees (rpCoarse.getLastTheta ())));
+	    
+	    if (randInt.nextInt(2) == 0)
+	    	gravityConstant = new GravityConstant(9.81);
+	    else
+	    	gravityConstant = new GravityConstant(25);
+	    
+	    rp.setG(gravityConstant.getGravitationalField());
+	    sp.setG(gravityConstant.getGravitationalField());
+	    rpCoarse.setG(gravityConstant.getGravitationalField());
 	}
     }
 }

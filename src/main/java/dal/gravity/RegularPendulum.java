@@ -14,18 +14,18 @@ public class RegularPendulum extends AbstractPendulum {
      * Creates a new Pendulum instance 
      */
     public RegularPendulum (double inLength, double inMass, double inTheta0, 
-		     double inDelta, double inDiss) {
-	super (inLength, inMass, inTheta0, GRAVITY);
+		     double inDelta, double inDissn, double gravity) {
+	super (inLength, inMass, inTheta0, gravity);
 	delta=inDelta;
-	dissipation = inDiss;
+	dissipation = inDissn;
 	lastVel = 0;
 	lastTheta = this.getMaxAngularDisplacement ();
 	lastAccel = -(this.getGravitationalField () / this.getStringLength ())*Math.sin (lastTheta);
     }
 
     public RegularPendulum (double inLength, double inMass, double inTheta0, 
-		     double inDelta) {
-	this (inLength, inMass, inTheta0, inDelta, 0);
+		     double inDelta, double gravity) {
+	this (inLength, inMass, inTheta0, inDelta, 0, gravity);
     }
 
     public void step () {
